@@ -69,3 +69,13 @@ Run the applicable checks for every change:
    ```bash
    npx tsc --noEmit
    npm run lint
+   ```
+2. **Automated Unit Testing:**
+   ```bash
+   npx vitest run
+   ```
+3. **Regular Atomic Commits:**
+   - Commit regularly after every single task, feature, or bugfix passes verification.
+   - Never hoard uncommitted changes across multiple tasks.
+   - Use descriptive conventional commit messages (`feat:`, `fix:`, `test:`, `docs:`, `chore:`).
+
