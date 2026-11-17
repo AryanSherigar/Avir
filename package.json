@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "verify:core": "npx tsx scripts/verify-exposure.ts",
     "verify:simulation": "npx tsx scripts/verify-simulation.ts",
-    "verify:air": "npx tsx scripts/verify-air.ts"
+    "verify:air": "npx tsx scripts/verify-air.ts",
+    "verify:ai": "npx tsx scripts/verify-ai.ts"
   },
   "dependencies": {
     "@google/genai": "^3.4.0",
