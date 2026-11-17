@@ -27,7 +27,8 @@ High **Code Quality** is a primary evaluation metric. Enforce these rules across
 - **Small, Focused Functions:** Keep functions under **40 lines** with a single clear responsibility. Extract helper functions rather than nesting loops or conditionals.
 - **Flat Control Flow:** Prefer early returns and guard clauses over deep `if/else` nesting (maximum 2 levels of indentation inside function bodies).
 - **File Size Discipline:** Keep source files focused and under **250 lines**. Split large components or services into cohesive submodules.
-- **Self-Documenting Naming:** Use explicit, domain-accurate names (`calculateMemberExposureProxy`, `evaluateInterventionPracticality`). Add concise JSDoc comments explaining *why* non-obvious domain constants or thresholds exist.
+- **Self-Documenting Naming:** Use explicit, domain-accurate names (`calculateMemberExposureProxy`, `evaluateInterventionPracticality`).
+- **No Unnecessary Comments:** Code must be self-explanatory through clean design and descriptive naming. Avoid redundant, obvious, or narrative comments that restate what the code is doing. Only add concise JSDoc or comments explaining *why* non-obvious domain constants, mathematical formulations, or edge-case workarounds exist.
 - **Zero Dead Code:** Never leave commented-out code blocks, unused imports, `console.log` debugging statements, or `TODO` stubs in committed files.
 
 ---
