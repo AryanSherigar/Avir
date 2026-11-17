@@ -78,6 +78,7 @@ export const HouseholdProfileSchema = z.object({
 export type Location = z.infer<typeof LocationSchema>;
 export type Member = z.infer<typeof MemberSchema>;
 export type Activity = z.infer<typeof ActivitySchema>;
+export type ActivityType = z.infer<typeof ActivityTypeSchema>;
 export type HomeEnvironment = z.infer<typeof HomeEnvironmentSchema>;
 export type Constraints = z.infer<typeof ConstraintsSchema>;
 export type HouseholdProfile = z.infer<typeof HouseholdProfileSchema>;
