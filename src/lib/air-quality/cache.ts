@@ -10,11 +10,19 @@ const MAX_CACHE_ENTRIES = 100;
 
 const airCache = new Map<string, CacheEntry>();
 
-export function getAirCacheKey(city: string, lat: number, lon: number): string {
+export function getAirCacheKey(
+  city: string,
+  lat: number,
+  lon: number,
+  areaLabel?: string
+): string {
   const normCity = city.trim().toLowerCase();
   const roundedLat = Math.round(lat * 20) / 20;
   const roundedLon = Math.round(lon * 20) / 20;
-  return `${normCity}_${roundedLat}_${roundedLon}`;
+  const normArea = areaLabel
+    ? `_${areaLabel.trim().toLowerCase().replace(/[^a-z0-9]/g, "")}`
+    : "";
+  return `${normCity}_${roundedLat}_${roundedLon}${normArea}`;
 }
 
 export function getAirCache(key: string): EnvironmentalContext | null {

@@ -70,6 +70,17 @@ describe("Air Quality LRU Cache", () => {
     expect(key2).toBe("delhi_28.6_77.2");
   });
 
+  it("incorporates normalized areaLabel into spatial cache keys to prevent collision", () => {
+    const keyAnandVihar = getAirCacheKey("Delhi", 28.6139, 77.2090, "Anand Vihar");
+    const keyMandirMarg = getAirCacheKey("Delhi", 28.6139, 77.2090, "Mandir Marg");
+    const keyNoArea = getAirCacheKey("Delhi", 28.6139, 77.2090);
+
+    expect(keyAnandVihar).toBe("delhi_28.6_77.2_anandvihar");
+    expect(keyMandirMarg).toBe("delhi_28.6_77.2_mandirmarg");
+    expect(keyNoArea).toBe("delhi_28.6_77.2");
+    expect(keyAnandVihar).not.toBe(keyMandirMarg);
+  });
+
   it("stores and retrieves cached environmental context within TTL", () => {
     const key = getAirCacheKey("Delhi", 28.6139, 77.2090);
     setAirCache(key, demoData as EnvironmentalContext);

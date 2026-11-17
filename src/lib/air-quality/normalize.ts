@@ -10,7 +10,7 @@ export async function getEnvironmentalContext(
   lon = 77.209,
   areaLabel?: string
 ): Promise<EnvironmentalContext> {
-  const cacheKey = getAirCacheKey(city, lat, lon);
+  const cacheKey = getAirCacheKey(city, lat, lon, areaLabel);
   const cached = getAirCache(cacheKey);
   if (cached) return cached;
 
