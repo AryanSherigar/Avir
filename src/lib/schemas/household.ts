@@ -68,6 +68,7 @@ export const ConstraintsSchema = z.object({
 });
 
 export const HouseholdProfileSchema = z.object({
+  householdName: z.string().optional(),
   location: LocationSchema,
   members: z.array(MemberSchema).min(1),
   activities: z.array(ActivitySchema),
