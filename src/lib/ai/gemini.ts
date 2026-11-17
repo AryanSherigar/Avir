@@ -204,7 +204,19 @@ export async function runChatLoop(
     const systemInstruction = getChatSystemInstruction(lang);
     const contents = buildInitialChatContents(request.history, sanitizedMessage);
 
-    return await executeChatLoop(ai, contents, systemInstruction, executeTool);
+    let timer: NodeJS.Timeout | undefined;
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => reject(new Error("Gemini chat loop timed out")), TIMEOUT_MS);
+    });
+
+    try {
+      return await Promise.race([
+        executeChatLoop(ai, contents, systemInstruction, executeTool),
+        timeoutPromise,
+      ]);
+    } finally {
+      if (timer) clearTimeout(timer);
+    }
   } catch {
     return generateDeterministicChatResponse(request.profile, sanitizedMessage, context, lang);
   }

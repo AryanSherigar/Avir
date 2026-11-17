@@ -1,7 +1,7 @@
 import { HouseholdProfile } from "../schemas/household";
 import { EnvironmentalContext } from "../schemas/air";
 import { EvaluatedIntervention } from "../schemas/simulation";
-import { HouseholdExposureResult } from "../exposure/calculate";
+import type { HouseholdExposureResult } from "../exposure/calculate";
 import { PlanExplanation, ChatResponse, RecommendationCard } from "../schemas/ai";
 
 function buildEnglishCards(evaluated: EvaluatedIntervention[]): RecommendationCard[] {

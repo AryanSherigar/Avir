@@ -39,7 +39,7 @@ export const ChatTurnSchema = z.object({
 
 export const ChatRequestSchema = z.object({
   profile: HouseholdProfileSchema,
-  message: z.string().min(1).max(500),
+  message: z.string().trim().min(1).max(500),
   history: z.array(ChatTurnSchema).default([]),
 });
 

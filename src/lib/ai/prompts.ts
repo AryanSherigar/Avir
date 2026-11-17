@@ -1,11 +1,11 @@
 import { HouseholdProfile } from "../schemas/household";
 import { EnvironmentalContext } from "../schemas/air";
 import { EvaluatedIntervention } from "../schemas/simulation";
-import { HouseholdExposureResult } from "../exposure/calculate";
+import type { HouseholdExposureResult } from "../exposure/calculate";
 
 export function sanitizeUserMessage(input: string): string {
   const stripped = input.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").trim();
-  return stripped.slice(0, 500);
+  return stripped.slice(0, 500).trimEnd();
 }
 
 export function getPlanSystemInstruction(language: "en" | "hi"): string {
@@ -61,7 +61,7 @@ export function formatPlanPrompt(
       baselineExposure: Math.round(baseline.peakVulnerableMember.exposure.centralEstimate),
     },
     currentOutdoorPm25: context.currentObservation?.pm25 ?? 0,
-    observationSource: context.currentObservation?.source ?? "open_meteo",
+    observationSource: context.currentObservation?.source ?? "open_meteo_current",
     topInterventions: evaluated.slice(0, 5).map((e) => ({
       id: e.interventionId,
       title: e.title,

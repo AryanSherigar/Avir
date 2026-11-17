@@ -4,9 +4,8 @@ import { HouseholdProfileSchema } from "@/lib/schemas/household";
 import { EnvironmentalContext } from "@/lib/schemas/air";
 import { EvaluatedIntervention } from "@/lib/schemas/simulation";
 import { PlanExplanation, PlanResponse } from "@/lib/schemas/ai";
-import { HouseholdExposureResult } from "@/lib/exposure";
+import { calculateHouseholdExposure, type HouseholdExposureResult } from "@/lib/exposure";
 import { getEnvironmentalContext } from "@/lib/air-quality";
-import { calculateHouseholdExposure } from "@/lib/exposure";
 import { getApplicableInterventions, evaluateIntervention } from "@/lib/interventions";
 import { generatePlanExplanation } from "@/lib/ai";
 

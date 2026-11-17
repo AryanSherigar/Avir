@@ -131,8 +131,22 @@ async function verifyPatternB(
   }
 }
 
-function verifyGuardrails(): void {
+function verifyGuardrails(evaluated: Array<{ personalProtection: unknown; environmentalContribution: { privateVehicleKmAvoidedPerDay: number }; practicality: unknown }>): void {
   console.log("\n[3/3] Scientific Guardrail Invariant Checks:");
+  if (evaluated.length === 0) {
+    throw new Error("Guardrail assertion failed: No evaluated interventions found.");
+  }
+  const hasThreePillars = evaluated.every(
+    (e) => e.personalProtection && e.environmentalContribution && e.practicality
+  );
+  if (!hasThreePillars) {
+    throw new Error("Guardrail assertion failed: One or more interventions lack three-pillar output.");
+  }
+  const validKmAccounting = evaluated.every((e) => e.environmentalContribution.privateVehicleKmAvoidedPerDay >= 0);
+  if (!validKmAccounting) {
+    throw new Error("Guardrail assertion failed: Invalid privateVehicleKmAvoidedPerDay.");
+  }
+
   console.log("  [PASS] Zero LLM arithmetic: All numbers originate from deterministic engines.");
   console.log("  [PASS] Honest accounting: Reductions framed in privateVehicleKmAvoidedPerDay.");
   console.log("  [PASS] Three output pillars strictly preserved.");
@@ -153,7 +167,7 @@ async function runDiagnostic(): Promise<void> {
 
   await verifyPatternA(profile, baseline, evaluated, context);
   await verifyPatternB(profile, context);
-  verifyGuardrails();
+  verifyGuardrails(evaluated);
 
   console.log("\n================================================================================");
   console.log("                     ALL AI ORCHESTRATION CHECKS PASSED                         ");
