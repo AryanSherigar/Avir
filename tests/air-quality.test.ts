@@ -8,6 +8,7 @@ import {
 } from "../src/lib/air-quality/cache";
 import { parseCpcbRecords, calculateHaversineDistanceKm } from "../src/lib/air-quality/cpcb";
 import { parseOpenMeteoPayload } from "../src/lib/air-quality/open-meteo";
+import { getEnvironmentalContext } from "../src/lib/air-quality/normalize";
 import demoData from "../data/demo-air-quality.json";
 import { EnvironmentalContext } from "../src/lib/schemas/air";
 
@@ -171,5 +172,20 @@ describe("Open-Meteo Ingestion & 24h Normalization", () => {
   it("handles null/missing payload gracefully", () => {
     expect(parseOpenMeteoPayload(null)).toBeNull();
     expect(parseOpenMeteoPayload({})).toBeNull();
+  });
+});
+
+describe("Environmental Context Cascading Normalizer", () => {
+  it("falls back to demo snapshot when external APIs fail or are unconfigured", async () => {
+    const context = await getEnvironmentalContext("Delhi", 28.6139, 77.2090);
+    expect(context).not.toBeNull();
+    expect(context.hourlyForecast).toHaveLength(24);
+    expect(["cpcb", "open_meteo_current", "demo"]).toContain(context.currentObservation.source);
+  });
+
+  it("caches successful results and serves cache on repeated call", async () => {
+    const c1 = await getEnvironmentalContext("Delhi", 28.6139, 77.2090);
+    const c2 = await getEnvironmentalContext("Delhi", 28.6139, 77.2090);
+    expect(c1).toEqual(c2);
   });
 });
