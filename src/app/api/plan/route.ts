@@ -9,7 +9,7 @@ import { getEnvironmentalContext } from "@/lib/air-quality";
 import { getApplicableInterventions, evaluateIntervention } from "@/lib/interventions";
 import { generatePlanExplanation } from "@/lib/ai";
 
-export const PlanRequestSchema = z.object({
+const PlanRequestSchema = z.object({
   profile: HouseholdProfileSchema,
 });
 
