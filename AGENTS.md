@@ -1,7 +1,7 @@
-# AGENTS.md — SAANS Engineering & Agent Governance
+# AGENTS.md — Avir Engineering & Agent Governance
 
 ## 1. Mission & Architectural Authority
-You are building **SAANS (Smart Air Adaptation and Navigation System)**, a hybrid deterministic and GenAI household winter smog decision-support system governed by `docs/RFC.md`.
+You are building **Avir (Smart Air Adaptation and Navigation System)**, a hybrid deterministic and GenAI household winter smog decision-support system governed by `docs/RFC.md`.
 
 - **Primary Vertical:** Budget-conscious multigenerational urban Indian households (Delhi NCR default).
 - **Three Non-Negotiable Output Pillars (Never Combine into One Score):**
