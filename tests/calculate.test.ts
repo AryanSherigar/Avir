@@ -60,4 +60,27 @@ describe("Household Exposure Calculator", () => {
     // Hour 9 has 1 hour of two-wheeler commute at outdoor 200 => 200 * 1.15 = 230
     expect(hour9?.centralEstimate).toBeCloseTo(230, 1);
   });
+
+  it("applies infiltrationMultiplier to reduce indoor exposure", () => {
+    const baseline = calculateHouseholdExposure(profile, forecast);
+    const reduced = calculateHouseholdExposure(profile, forecast, {
+      infiltrationMultiplier: 0.8,
+    });
+
+    expect(reduced.householdMeanExposure.centralEstimate).toBeLessThan(
+      baseline.householdMeanExposure.centralEstimate
+    );
+  });
+
+  it("applies maskMultiplier to reduce outdoor transit exposure", () => {
+    const baseline = calculateHouseholdExposure(profile, forecast);
+    const masked = calculateHouseholdExposure(profile, forecast, {
+      maskMultiplier: 0.4,
+    });
+
+    expect(masked.memberExposures["parent-1"]!.centralEstimate).toBeLessThan(
+      baseline.memberExposures["parent-1"]!.centralEstimate
+    );
+  });
 });
+

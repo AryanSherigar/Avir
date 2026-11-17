@@ -32,6 +32,11 @@ export interface HouseholdExposureResult {
   };
 }
 
+export interface ExposureCalculationOptions {
+  infiltrationMultiplier?: number;
+  maskMultiplier?: number;
+}
+
 function getTransportMultiplier(mode?: string): number {
   if (mode === "two_wheeler") return 1.15;
   if (mode === "car") return 0.85;
@@ -42,7 +47,8 @@ function computeSlotExposure(
   slot: NormalizedHourSlot | undefined,
   outdoorPm25: number,
   home: HouseholdProfile["home"],
-  h: number
+  h: number,
+  options?: ExposureCalculationOptions
 ): { low: number; central: number; high: number; time: number; primaryType: string } {
   let low = 0;
   let central = 0;
@@ -55,6 +61,9 @@ function computeSlotExposure(
     return { low, central, high, time, primaryType };
   }
 
+  const infMult = options?.infiltrationMultiplier ?? 1.0;
+  const maskMult = options?.maskMultiplier ?? 1.0;
+
   for (const act of slot.activities) {
     time += act.fraction;
     if (act.fraction > maxFraction) {
@@ -64,13 +73,15 @@ function computeSlotExposure(
 
     if (act.indoor) {
       const isCooking = act.type === "cooking";
-      const conc = calculateIndoorConcentration(outdoorPm25, home, h, isCooking);
+      const conc = calculateIndoorConcentration(outdoorPm25, home, h, isCooking, infMult);
       low += conc.low * act.fraction;
       central += conc.central * act.fraction;
       high += conc.high * act.fraction;
     } else {
+      const isTwoWheelerOrWalk = act.transportMode === "two_wheeler" || act.transportMode === "walk_cycle";
+      const personalMult = isTwoWheelerOrWalk ? maskMult : 1.0;
       const mult = getTransportMultiplier(act.transportMode);
-      const outdoorConc = outdoorPm25 * mult;
+      const outdoorConc = outdoorPm25 * mult * personalMult;
       low += outdoorConc * act.fraction;
       central += outdoorConc * act.fraction;
       high += outdoorConc * act.fraction;
@@ -83,7 +94,8 @@ function computeSlotExposure(
 function computeMemberResult(
   member: Member,
   profile: HouseholdProfile,
-  hourlyForecast: HourlyForecastPoint[]
+  hourlyForecast: HourlyForecastPoint[],
+  options?: ExposureCalculationOptions
 ): MemberExposureResult {
   const memberActivities = profile.activities.filter((a) => a.memberId === member.id);
   const slots = normalizeMemberSchedule(memberActivities);
@@ -97,7 +109,7 @@ function computeMemberResult(
   for (let h = 0; h < 24; h++) {
     const forecastPoint = hourlyForecast[h];
     const outdoorPm25 = forecastPoint?.pm25 ?? 150;
-    const slotData = computeSlotExposure(slots[h], outdoorPm25, profile.home, h);
+    const slotData = computeSlotExposure(slots[h], outdoorPm25, profile.home, h, options);
 
     memberTime += slotData.time;
     memberLow += slotData.low;
@@ -130,7 +142,8 @@ function computeMemberResult(
 
 export function calculateHouseholdExposure(
   profile: HouseholdProfile,
-  hourlyForecast: HourlyForecastPoint[]
+  hourlyForecast: HourlyForecastPoint[],
+  options?: ExposureCalculationOptions
 ): HouseholdExposureResult {
   const memberExposures: Record<string, MemberExposureResult> = {};
   let totalMeanLow = 0;
@@ -138,7 +151,7 @@ export function calculateHouseholdExposure(
   let totalMeanHigh = 0;
 
   for (const member of profile.members) {
-    const result = computeMemberResult(member, profile, hourlyForecast);
+    const result = computeMemberResult(member, profile, hourlyForecast, options);
     memberExposures[member.id] = result;
     totalMeanLow += result.lowEstimate;
     totalMeanCentral += result.centralEstimate;

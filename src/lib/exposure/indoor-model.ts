@@ -24,15 +24,16 @@ const EXHAUST_RETENTION_FACTOR = 0.35;
 const PURIFIER_INFILTRATION_FACTOR = 0.5;
 const INCENSE_EMISSION_RATE = 35;
 
-export function getInfiltrationBand(home: HomeEnvironment): InfiltrationBand {
+export function getInfiltrationBand(
+  home: HomeEnvironment,
+  infiltrationMultiplier: number = 1.0
+): InfiltrationBand {
   const [low, central, high] = BASE_INFILTRATION[home.ventilation];
-  if (!home.hasAirPurifier) {
-    return [low, central, high];
-  }
+  const purifierFactor = home.hasAirPurifier ? PURIFIER_INFILTRATION_FACTOR : 1.0;
   return [
-    low * PURIFIER_INFILTRATION_FACTOR,
-    central * PURIFIER_INFILTRATION_FACTOR,
-    high * PURIFIER_INFILTRATION_FACTOR,
+    low * purifierFactor * infiltrationMultiplier,
+    central * purifierFactor * infiltrationMultiplier,
+    high * purifierFactor * infiltrationMultiplier,
   ];
 }
 
@@ -59,9 +60,10 @@ export function calculateIndoorConcentration(
   outdoorPm25: number,
   home: HomeEnvironment,
   hourIndex: number,
-  isCooking: boolean
+  isCooking: boolean,
+  infiltrationMultiplier: number = 1.0
 ): IndoorConcentrationBand {
-  const [fLow, fCentral, fHigh] = getInfiltrationBand(home);
+  const [fLow, fCentral, fHigh] = getInfiltrationBand(home, infiltrationMultiplier);
   const source = calculateIndoorSource(home, hourIndex, isCooking);
 
   return {
