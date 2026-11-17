@@ -384,5 +384,45 @@ describe("Server-Side Gemini AI Layer", () => {
       expect(chatRes.aiFallback).toBe(true);
       expect(chatRes.response).toBeDefined();
     });
+
+    it("windows chat history to the last 10 turns before forwarding to Gemini", async () => {
+      process.env.GEMINI_API_KEY = "test-key";
+
+      const mockGenerateContent = vi.fn().mockResolvedValue({
+        text: "Windowed history response",
+        functionCalls: undefined,
+      });
+
+      vi.mocked(GoogleGenAI).mockImplementation(() => ({
+        models: {
+          generateContent: mockGenerateContent,
+        },
+      } as unknown as GoogleGenAI));
+
+      const fifteenTurns = Array.from({ length: 15 }, (_, i) => ({
+        role: (i % 2 === 0 ? "user" : "model") as "user" | "model",
+        text: `Message number ${i}`,
+      }));
+
+      await runChatLoop(
+        {
+          profile: testProfile,
+          message: "Latest user prompt",
+          history: fifteenTurns,
+        },
+        context
+      );
+
+      expect(mockGenerateContent).toHaveBeenCalled();
+      const firstCall = mockGenerateContent.mock.calls[0];
+      expect(firstCall).toBeDefined();
+      const firstCallArgs = firstCall![0];
+      // 10 history turns + 1 latest user prompt = 11 contents
+      expect(firstCallArgs.contents).toHaveLength(11);
+      // The oldest turn included should be turn 5 (15 - 10)
+      expect(firstCallArgs.contents[0].parts[0].text).toBe("Message number 5");
+      // The last content should be the latest user message
+      expect(firstCallArgs.contents[10].parts[0].text).toBe("Latest user prompt");
+    });
   });
 });

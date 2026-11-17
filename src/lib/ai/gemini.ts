@@ -117,7 +117,8 @@ function buildInitialChatContents(
   history: ChatTurn[],
   userMessage: string
 ): Content[] {
-  const contents: Content[] = history.map((h) => ({
+  const windowedHistory = history.slice(-10);
+  const contents: Content[] = windowedHistory.map((h) => ({
     role: h.role === "user" ? "user" : "model",
     parts: [{ text: h.text }],
   }));

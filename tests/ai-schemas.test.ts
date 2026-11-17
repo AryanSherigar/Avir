@@ -144,6 +144,29 @@ describe("AI Schemas", () => {
     if (parsedDefaultHistory.success) {
       expect(parsedDefaultHistory.data.history).toEqual([]);
     }
+
+    // History bounded to max 20 turns
+    const validHistory20 = Array.from({ length: 20 }, (_, i) => ({
+      role: (i % 2 === 0 ? "user" : "model") as "user" | "model",
+      text: `Turn ${i}`,
+    }));
+    expect(
+      ChatRequestSchema.safeParse({
+        ...validChatReq,
+        history: validHistory20,
+      }).success
+    ).toBe(true);
+
+    const invalidHistory21 = Array.from({ length: 21 }, (_, i) => ({
+      role: (i % 2 === 0 ? "user" : "model") as "user" | "model",
+      text: `Turn ${i}`,
+    }));
+    expect(
+      ChatRequestSchema.safeParse({
+        ...validChatReq,
+        history: invalidHistory21,
+      }).success
+    ).toBe(false);
   });
 
   it("validates ChatResponse and ActionCards", () => {
