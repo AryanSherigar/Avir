@@ -32,18 +32,18 @@
 - Consumes: `ChatTurnSchema`, `ChatTurn[]`
 - Produces: `ChatRequestSchema.shape.history` with `.max(20)`, `buildInitialChatContents` windowed with `history.slice(-10)`
 
-- [ ] **Step 1: Write failing tests for chat history bounds**
+- [x] **Step 1: Write failing tests for chat history bounds**
   Add unit tests in `tests/ai-schemas.test.ts`:
   - Verify that a `ChatRequest` with 20 turns passes validation.
   - Verify that a `ChatRequest` with 21 turns is rejected with a Zod validation error.
   Add unit test in `tests/ai-gemini.test.ts` (or mock test) verifying that `buildInitialChatContents` only takes the last 10 turns when given 15 turns.
 
-- [ ] **Step 2: Run tests to confirm failure**
+- [x] **Step 2: Run tests to confirm failure**
   ```bash
   npx vitest run tests/ai-schemas.test.ts
   ```
 
-- [ ] **Step 3: Update `src/lib/schemas/ai.ts`**
+- [x] **Step 3: Update `src/lib/schemas/ai.ts`**
   Update `ChatRequestSchema`:
   ```ts
   export const ChatRequestSchema = z.object({
@@ -53,7 +53,7 @@
   });
   ```
 
-- [ ] **Step 4: Update `src/lib/ai/gemini.ts`**
+- [x] **Step 4: Update `src/lib/ai/gemini.ts`**
   In `buildInitialChatContents`:
   ```ts
   function buildInitialChatContents(
@@ -73,12 +73,12 @@
   }
   ```
 
-- [ ] **Step 5: Run tests and verify they pass**
+- [x] **Step 5: Run tests and verify they pass**
   ```bash
   npx vitest run tests/ai-schemas.test.ts tests/ai-gemini.test.ts
   ```
 
-- [ ] **Step 6: Commit changes**
+- [x] **Step 6: Commit changes**
   ```bash
   git commit -am "fix(security): bound chat history array and prompt context window"
   ```
@@ -96,17 +96,17 @@
 - Consumes: `getAirCacheKey(city: string, lat: number, lon: number, areaLabel?: string): string`
 - Produces: Normalized area-aware cache keys that prevent cross-neighborhood cache collision.
 
-- [ ] **Step 1: Write failing tests for areaLabel cache separation**
+- [x] **Step 1: Write failing tests for areaLabel cache separation**
   Add unit tests in `tests/air-quality.test.ts`:
   - `getAirCacheKey("Delhi", 28.61, 77.21, "Anand Vihar")` vs `getAirCacheKey("Delhi", 28.61, 77.21, "Mandir Marg")` produce distinct keys.
   - Querying context with `areaLabel: "Anand Vihar"` caches separately from `areaLabel: "Mandir Marg"`.
 
-- [ ] **Step 2: Run tests to confirm failure**
+- [x] **Step 2: Run tests to confirm failure**
   ```bash
   npx vitest run tests/air-quality.test.ts
   ```
 
-- [ ] **Step 3: Update `src/lib/air-quality/cache.ts`**
+- [x] **Step 3: Update `src/lib/air-quality/cache.ts`**
   Update signature and logic:
   ```ts
   export function getAirCacheKey(
@@ -125,18 +125,18 @@
   }
   ```
 
-- [ ] **Step 4: Update `src/lib/air-quality/normalize.ts`**
+- [x] **Step 4: Update `src/lib/air-quality/normalize.ts`**
   Pass `areaLabel` when generating `cacheKey`:
   ```ts
   const cacheKey = getAirCacheKey(city, lat, lon, areaLabel);
   ```
 
-- [ ] **Step 5: Run air quality tests and verify they pass**
+- [x] **Step 5: Run air quality tests and verify they pass**
   ```bash
   npx vitest run tests/air-quality.test.ts tests/api-air.test.ts
   ```
 
-- [ ] **Step 6: Commit changes**
+- [x] **Step 6: Commit changes**
   ```bash
   git commit -am "fix(security): prevent air cache collision by keying normalized areaLabel"
   ```
@@ -153,7 +153,7 @@
 - Consumes: `HouseholdProfileSchema`
 - Produces: Constrained `members` (max 20), `activities` (max 60), `nonNegotiableActivityIds` (max 20), `householdName` (max 100)
 
-- [ ] **Step 1: Write failing tests for household array upper bounds**
+- [x] **Step 1: Write failing tests for household array upper bounds**
   Add unit tests in `tests/schemas.test.ts`:
   - Profile with 21 members is rejected by `HouseholdProfileSchema.safeParse`.
   - Profile with 61 activities is rejected by `HouseholdProfileSchema.safeParse`.
@@ -161,12 +161,12 @@
   - Profile with household name > 100 characters is rejected.
   - Realistic profile with 5 members and 15 activities passes.
 
-- [ ] **Step 2: Run tests to confirm failure**
+- [x] **Step 2: Run tests to confirm failure**
   ```bash
   npx vitest run tests/schemas.test.ts
   ```
 
-- [ ] **Step 3: Update `src/lib/schemas/household.ts`**
+- [x] **Step 3: Update `src/lib/schemas/household.ts`**
   Add `.max()` constraints:
   ```ts
   export const ConstraintsSchema = z.object({
@@ -186,12 +186,12 @@
   });
   ```
 
-- [ ] **Step 4: Run tests and verify they pass**
+- [x] **Step 4: Run tests and verify they pass**
   ```bash
   npx vitest run tests/schemas.test.ts tests/exposure.test.ts tests/calculate.test.ts
   ```
 
-- [ ] **Step 5: Commit changes**
+- [x] **Step 5: Commit changes**
   ```bash
   git commit -am "fix(security): constrain members, activities, and string lengths in HouseholdProfileSchema"
   ```
@@ -207,7 +207,7 @@
 **Interfaces:**
 - Produces: `next.config.mjs` exporting Next.js configuration with `headers()` function returning CSP, HSTS, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, and Permissions-Policy.
 
-- [ ] **Step 1: Write test verifying security header configuration**
+- [x] **Step 1: Write test verifying security header configuration**
   Create `tests/security-headers.test.ts` that dynamically imports `next.config.mjs` and verifies that calling `headers()` returns rules covering `source: "/(.*)"` with required security headers:
   - `Content-Security-Policy`
   - `Strict-Transport-Security`
@@ -216,12 +216,12 @@
   - `Referrer-Policy: strict-origin-when-cross-origin`
   - `Permissions-Policy`
 
-- [ ] **Step 2: Run test to confirm failure**
+- [x] **Step 2: Run test to confirm failure**
   ```bash
   npx vitest run tests/security-headers.test.ts
   ```
 
-- [ ] **Step 3: Create `next.config.mjs`**
+- [x] **Step 3: Create `next.config.mjs`**
   Implement:
   ```javascript
   /** @type {import('next').NextConfig} */
@@ -265,12 +265,12 @@
   export default nextConfig;
   ```
 
-- [ ] **Step 4: Run tests and verify they pass**
+- [x] **Step 4: Run tests and verify they pass**
   ```bash
   npx vitest run tests/security-headers.test.ts
   ```
 
-- [ ] **Step 5: Commit changes**
+- [x] **Step 5: Commit changes**
   ```bash
   git commit -am "feat(security): configure production HTTP security headers in next.config.mjs"
   ```
@@ -279,15 +279,15 @@
 
 ### Task 5: Full Verification & Integration Verification
 
-- [ ] **Step 1: Type check**
+- [x] **Step 1: Type check**
   ```bash
   npx tsc --noEmit
   ```
-- [ ] **Step 2: Run complete test suite**
+- [x] **Step 2: Run complete test suite**
   ```bash
   npx vitest run
   ```
-- [ ] **Step 3: Run existing domain verification scripts**
+- [x] **Step 3: Run existing domain verification scripts**
   ```bash
   npm run verify:core
   npm run verify:simulation
@@ -295,7 +295,7 @@
   npm run verify:ai
   npm run verify:frontend
   ```
-- [ ] **Step 4: Next.js build verification**
+- [x] **Step 4: Next.js build verification**
   ```bash
   npm run build
   ```
