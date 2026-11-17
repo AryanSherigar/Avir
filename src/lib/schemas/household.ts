@@ -64,14 +64,14 @@ export const ConstraintsSchema = z.object({
   dailyBudgetInr: z.number().min(0),
   maxExtraTimeMinutesPerDay: z.number().min(0),
   preferredLanguage: z.enum(["en", "hi"]).default("en"),
-  nonNegotiableActivityIds: z.array(z.string()).default([]),
+  nonNegotiableActivityIds: z.array(z.string()).max(20).default([]),
 });
 
 export const HouseholdProfileSchema = z.object({
-  householdName: z.string().optional(),
+  householdName: z.string().max(100).optional(),
   location: LocationSchema,
-  members: z.array(MemberSchema).min(1),
-  activities: z.array(ActivitySchema),
+  members: z.array(MemberSchema).min(1).max(20),
+  activities: z.array(ActivitySchema).max(60),
   home: HomeEnvironmentSchema,
   constraints: ConstraintsSchema,
 });
