@@ -30,7 +30,7 @@ export const InterventionRuleSchema = z.object({
   }),
   effectModifiers: z.object({
     infiltrationMultiplier: z.number().positive().max(1.0).optional(),
-    indoorSourceMultiplier: z.number().positive().max(1.0).optional(),
+    indoorSourceMultiplier: z.number().min(0).max(1.0).optional(),
     shiftActivityTypesToLowestPmWindow: z.array(ActivityTypeSchema).optional(),
     replaceTransportWith: z.literal("public_transit").optional(),
     ventilationWindowOnly: z.boolean().optional(),

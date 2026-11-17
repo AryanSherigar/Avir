@@ -1,0 +1,66 @@
+[
+  {
+    "id": "cpcb_naqi_2015",
+    "sourceTitle": "National Air Quality Index: Guidelines & Health Breakpoints",
+    "authorsOrAgency": "Central Pollution Control Board (CPCB), MoEFCC",
+    "year": 2015,
+    "claimSummary": "Defines Indian NAQI breakpoints and hourly concentration sub-indices.",
+    "limitations": "Official NAQI requires minimum 16 hours of continuous monitoring across at least 3 pollutants."
+  },
+  {
+    "id": "pant_indoor_2019",
+    "sourceTitle": "Particulate matter exposure in indoor and outdoor microenvironments in Delhi",
+    "authorsOrAgency": "Pant, P., et al.",
+    "year": 2019,
+    "claimSummary": "Demonstrates indoor/outdoor PM2.5 infiltration ratios of 0.50 to 0.85 in naturally ventilated Delhi homes.",
+    "limitations": "Infiltration varies with door/window construction and micro-local wind pressure."
+  },
+  {
+    "id": "who_aqg_2021",
+    "sourceTitle": "Global Air Quality Guidelines: Particulate Matter (PM2.5 and PM10)",
+    "authorsOrAgency": "World Health Organization",
+    "year": 2021,
+    "claimSummary": "Recommends 24-hour PM2.5 limit of 15 µg/m³; establishes linear exposure-response without safe threshold.",
+    "limitations": "Guideline represents epidemiological ideal; immediate attainment infeasible in winter Indo-Gangetic Plain."
+  },
+  {
+    "id": "icmr_respiratory_2020",
+    "sourceTitle": "Health effects of ambient air pollution in Indian megacities",
+    "authorsOrAgency": "Indian Council of Medical Research (ICMR)",
+    "year": 2020,
+    "claimSummary": "Confirms elevated vulnerability for school children and older adults with pre-existing cardiopulmonary symptoms.",
+    "limitations": "Population-level statistical risk; individual vulnerability varies."
+  },
+  {
+    "id": "goel_commute_2015",
+    "sourceTitle": "Commuter exposure to PM2.5 and black carbon in auto-rickshaws, buses, and metro in Delhi",
+    "authorsOrAgency": "Goel, R. & Kumar, P.",
+    "year": 2015,
+    "claimSummary": "Open-air motorized two-wheelers and pedestrians experience 15-25% higher acute PM2.5 exposure than closed vehicles.",
+    "limitations": "On-road concentration spikes depend on immediate tailpipe proximity and traffic congestion."
+  },
+  {
+    "id": "kitchen_exhaust_2018",
+    "sourceTitle": "Indoor air quality impact of cooking fuels and exhaust ventilation in urban households",
+    "authorsOrAgency": "Balakrishnan, K., et al.",
+    "year": 2018,
+    "claimSummary": "Active outdoor kitchen exhaust reduces localized cooking PM2.5 surge by 60-70%.",
+    "limitations": "Assumes hood flow rate exceeds 200 m³/h with direct outdoor venting."
+  },
+  {
+    "id": "agarbatti_smoke_2017",
+    "sourceTitle": "Emission factors and chemical characteristics of incense smoke in confined spaces",
+    "authorsOrAgency": "See, S.W. & Balasubramanian, R.",
+    "year": 2017,
+    "claimSummary": "Confined evening burning of agarbatti and mosquito coils generates substantial indoor PM2.5 increments (30-50 µg/m³).",
+    "limitations": "Emissions depend on stick composition, room volume, and ventilation exchange rate."
+  },
+  {
+    "id": "n95_filtration_2020",
+    "sourceTitle": "Particle filtration efficiency of certified respirators vs cloth masks in Asian cities",
+    "authorsOrAgency": "Shakya, K.M., et al.",
+    "year": 2020,
+    "claimSummary": "Certified N95/FFP2 respirators provide 60-85% real-world personal exposure reduction during active transit.",
+    "limitations": "Efficiency drops significantly with poor facial seal, facial hair, or frequent adjustment."
+  }
+]

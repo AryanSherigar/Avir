@@ -1,0 +1,44 @@
+{
+  "currentObservation": {
+    "stationName": "Anand Vihar, Delhi - DPCC",
+    "city": "Delhi",
+    "source": "demo",
+    "observedAt": "2026-11-17T18:00:00+05:30",
+    "pm25": 345,
+    "pm10": 480,
+    "no2": 78,
+    "officialNaqi": 422,
+    "confidence": "high",
+    "distanceKm": 4.2
+  },
+  "hourlyForecast": [
+    { "hourIndex": 0, "isoTime": "2026-11-17T00:00:00+05:30", "pm25": 285, "pm10": 410, "windSpeedKmh": 4.1 },
+    { "hourIndex": 1, "isoTime": "2026-11-17T01:00:00+05:30", "pm25": 295, "pm10": 425, "windSpeedKmh": 3.8 },
+    { "hourIndex": 2, "isoTime": "2026-11-17T02:00:00+05:30", "pm25": 310, "pm10": 440, "windSpeedKmh": 3.2 },
+    { "hourIndex": 3, "isoTime": "2026-11-17T03:00:00+05:30", "pm25": 325, "pm10": 460, "windSpeedKmh": 2.9 },
+    { "hourIndex": 4, "isoTime": "2026-11-17T04:00:00+05:30", "pm25": 340, "pm10": 475, "windSpeedKmh": 2.5 },
+    { "hourIndex": 5, "isoTime": "2026-11-17T05:00:00+05:30", "pm25": 360, "pm10": 490, "windSpeedKmh": 2.4 },
+    { "hourIndex": 6, "isoTime": "2026-11-17T06:00:00+05:30", "pm25": 380, "pm10": 510, "windSpeedKmh": 2.6 },
+    { "hourIndex": 7, "isoTime": "2026-11-17T07:00:00+05:30", "pm25": 395, "pm10": 530, "windSpeedKmh": 3.1 },
+    { "hourIndex": 8, "isoTime": "2026-11-17T08:00:00+05:30", "pm25": 375, "pm10": 505, "windSpeedKmh": 4.5 },
+    { "hourIndex": 9, "isoTime": "2026-11-17T09:00:00+05:30", "pm25": 330, "pm10": 450, "windSpeedKmh": 6.2 },
+    { "hourIndex": 10, "isoTime": "2026-11-17T10:00:00+05:30", "pm25": 280, "pm10": 390, "windSpeedKmh": 8.0 },
+    { "hourIndex": 11, "isoTime": "2026-11-17T11:00:00+05:30", "pm25": 230, "pm10": 330, "windSpeedKmh": 9.8 },
+    { "hourIndex": 12, "isoTime": "2026-11-17T12:00:00+05:30", "pm25": 190, "pm10": 280, "windSpeedKmh": 11.2 },
+    { "hourIndex": 13, "isoTime": "2026-11-17T13:00:00+05:30", "pm25": 160, "pm10": 240, "windSpeedKmh": 12.0 },
+    { "hourIndex": 14, "isoTime": "2026-11-17T14:00:00+05:30", "pm25": 145, "pm10": 220, "windSpeedKmh": 12.5 },
+    { "hourIndex": 15, "isoTime": "2026-11-17T15:00:00+05:30", "pm25": 155, "pm10": 230, "windSpeedKmh": 11.0 },
+    { "hourIndex": 16, "isoTime": "2026-11-17T16:00:00+05:30", "pm25": 180, "pm10": 265, "windSpeedKmh": 9.2 },
+    { "hourIndex": 17, "isoTime": "2026-11-17T17:00:00+05:30", "pm25": 235, "pm10": 335, "windSpeedKmh": 6.8 },
+    { "hourIndex": 18, "isoTime": "2026-11-17T18:00:00+05:30", "pm25": 290, "pm10": 410, "windSpeedKmh": 5.0 },
+    { "hourIndex": 19, "isoTime": "2026-11-17T19:00:00+05:30", "pm25": 335, "pm10": 465, "windSpeedKmh": 3.9 },
+    { "hourIndex": 20, "isoTime": "2026-11-17T20:00:00+05:30", "pm25": 365, "pm10": 500, "windSpeedKmh": 3.2 },
+    { "hourIndex": 21, "isoTime": "2026-11-17T21:00:00+05:30", "pm25": 385, "pm10": 525, "windSpeedKmh": 2.8 },
+    { "hourIndex": 22, "isoTime": "2026-11-17T22:00:00+05:30", "pm25": 395, "pm10": 540, "windSpeedKmh": 2.5 },
+    { "hourIndex": 23, "isoTime": "2026-11-17T23:00:00+05:30", "pm25": 350, "pm10": 490, "windSpeedKmh": 3.0 }
+  ],
+  "dataQualityWarnings": [
+    "Demo Delhi smog snapshot active for offline evaluation"
+  ],
+  "isDemoFallback": true
+}

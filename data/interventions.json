@@ -1,0 +1,190 @@
+[
+  {
+    "id": "n95_two_wheeler_commute",
+    "title": {
+      "en": "Wear Certified N95 Mask on Two-Wheeler Commute",
+      "hi": "दोपहिया यात्रा पर प्रमाणित N95 मास्क पहनें"
+    },
+    "description": {
+      "en": "Reduces acute particulate inhalation during high-exposure motorized two-wheeler travel.",
+      "hi": "दोपहिया वाहन पर यात्रा के दौरान वायु प्रदूषण के सीधे संपर्क को कम करता है।"
+    },
+    "category": "exposure_reduction",
+    "prerequisites": {
+      "applicableTransport": ["two_wheeler", "walk_cycle"]
+    },
+    "effectModifiers": {
+      "indoorSourceMultiplier": 0.4
+    },
+    "practicality": {
+      "estimatedCostInr": 40,
+      "timeImpactMinutesPerDay": 2,
+      "inconvenienceLevel": "low"
+    },
+    "evidenceRefs": ["n95_filtration_2020", "goel_commute_2015"]
+  },
+  {
+    "id": "metro_transit_shift",
+    "title": {
+      "en": "Switch Daily Commute to Delhi Metro",
+      "hi": "दैनिक आवागमन के लिए दिल्ली मेट्रो का उपयोग करें"
+    },
+    "description": {
+      "en": "Avoids private on-road vehicle emissions and reduces direct tailpipe plume exposure.",
+      "hi": "निजी वाहन के धुएं से बचाता है और सड़क के प्रदूषण से सुरक्षित रखता है।"
+    },
+    "category": "emission_reduction",
+    "prerequisites": {
+      "applicableTransport": ["two_wheeler", "car"]
+    },
+    "effectModifiers": {
+      "replaceTransportWith": "public_transit"
+    },
+    "practicality": {
+      "estimatedCostInr": 60,
+      "timeImpactMinutesPerDay": 15,
+      "inconvenienceLevel": "medium"
+    },
+    "evidenceRefs": ["goel_commute_2015"]
+  },
+  {
+    "id": "shift_morning_exercise",
+    "title": {
+      "en": "Shift Outdoor Exercise to Mid-Afternoon Trough (13:00-16:00)",
+      "hi": "सुबह के व्यायाम को दोपहर (13:00-16:00) के समय बदलें"
+    },
+    "description": {
+      "en": "Avoids severe winter morning thermal inversion peaks when surface PM2.5 is highest.",
+      "hi": "सुबह के घने स्मॉग से बचें जब सतह पर प्रदूषण सबसे अधिक होता है।"
+    },
+    "category": "schedule",
+    "prerequisites": {
+      "requiresActivityTypes": ["exercise"]
+    },
+    "effectModifiers": {
+      "shiftActivityTypesToLowestPmWindow": ["exercise"]
+    },
+    "practicality": {
+      "estimatedCostInr": 0,
+      "timeImpactMinutesPerDay": 0,
+      "inconvenienceLevel": "medium"
+    },
+    "evidenceRefs": ["who_aqg_2021", "cpcb_naqi_2015"]
+  },
+  {
+    "id": "exhaust_hood_cooking",
+    "title": {
+      "en": "Use Kitchen Exhaust Fan During All Cooking",
+      "hi": "खाना बनाते समय हमेशा किचन एग्जॉस्ट फैन चलाएं"
+    },
+    "description": {
+      "en": "Directly expels localized combustion emissions, cutting indoor source surges.",
+      "hi": "रसोई से धुएं को तुरंत बाहर निकालता है और घर की हवा को स्वच्छ रखता है।"
+    },
+    "category": "indoor_air",
+    "prerequisites": {
+      "requiresActivityTypes": ["cooking"]
+    },
+    "effectModifiers": {
+      "indoorSourceMultiplier": 0.35
+    },
+    "practicality": {
+      "estimatedCostInr": 5,
+      "timeImpactMinutesPerDay": 0,
+      "inconvenienceLevel": "low"
+    },
+    "evidenceRefs": ["kitchen_exhaust_2018"]
+  },
+  {
+    "id": "switch_solid_to_induction",
+    "title": {
+      "en": "Switch from Solid Fuel/Chulha to Electric Induction Cooking",
+      "hi": "लकड़ी/कोयले के चूल्हे से इलेक्ट्रिक इंडक्शन कुकटॉप पर बदलें"
+    },
+    "description": {
+      "en": "Eliminates massive indoor solid-fuel combustion emissions.",
+      "hi": "ठोस ईंधन के अत्यधिक धुएं को पूरी तरह समाप्त करता है।"
+    },
+    "category": "emission_reduction",
+    "prerequisites": {
+      "applicableCookingFuel": ["solid_fuel"]
+    },
+    "effectModifiers": {
+      "indoorSourceMultiplier": 0.05
+    },
+    "practicality": {
+      "estimatedCostInr": 1800,
+      "timeImpactMinutesPerDay": 0,
+      "inconvenienceLevel": "medium"
+    },
+    "evidenceRefs": ["kitchen_exhaust_2018", "who_aqg_2021"]
+  },
+  {
+    "id": "eliminate_evening_incense",
+    "title": {
+      "en": "Pause Evening Agarbatti and Mosquito Coils",
+      "hi": "शाम को अगरबत्ती और मच्छर कॉइल का प्रयोग बंद करें"
+    },
+    "description": {
+      "en": "Prevents evening indoor particulate spike in confined living rooms.",
+      "hi": "शाम के समय बंद कमरे में अगरबत्ती के धुएं से होने वाले प्रदूषण को रोकता है।"
+    },
+    "category": "indoor_air",
+    "prerequisites": {
+      "requiresIncenseUse": true
+    },
+    "effectModifiers": {
+      "indoorSourceMultiplier": 0.0
+    },
+    "practicality": {
+      "estimatedCostInr": 0,
+      "timeImpactMinutesPerDay": 0,
+      "inconvenienceLevel": "low"
+    },
+    "evidenceRefs": ["agarbatti_smoke_2017"]
+  },
+  {
+    "id": "weatherstrip_windows",
+    "title": {
+      "en": "Seal Window Gaps with Foam Weatherstripping Tape",
+      "hi": "खिड़की और दरवाजों के किनारों को वेदरस्ट्रिपिंग टेप से सील करें"
+    },
+    "description": {
+      "en": "Restricts external smog infiltration into living and sleeping quarters.",
+      "hi": "बाहरी स्मॉग को घर के अंदर आने से 20% तक रोकता है।"
+    },
+    "category": "indoor_air",
+    "prerequisites": {},
+    "effectModifiers": {
+      "infiltrationMultiplier": 0.8
+    },
+    "practicality": {
+      "estimatedCostInr": 350,
+      "timeImpactMinutesPerDay": 0,
+      "inconvenienceLevel": "low"
+    },
+    "evidenceRefs": ["pant_indoor_2019"]
+  },
+  {
+    "id": "timed_cross_ventilation",
+    "title": {
+      "en": "Ventilate Home Only During Cleanest Window (13:00-15:00)",
+      "hi": "घर को केवल दोपहर (13:00-15:00) के सबसे स्वच्छ समय हवादार बनाएं"
+    },
+    "description": {
+      "en": "Airs out indoor stale air while minimizing outdoor particulate influx.",
+      "hi": "कमरे की हवा बदलें जब बाहर का प्रदूषण स्तर दिन में सबसे कम हो।"
+    },
+    "category": "schedule",
+    "prerequisites": {},
+    "effectModifiers": {
+      "ventilationWindowOnly": true
+    },
+    "practicality": {
+      "estimatedCostInr": 0,
+      "timeImpactMinutesPerDay": 5,
+      "inconvenienceLevel": "low"
+    },
+    "evidenceRefs": ["pant_indoor_2019", "cpcb_naqi_2015"]
+  }
+]
