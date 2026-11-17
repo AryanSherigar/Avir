@@ -6,6 +6,7 @@ import {
   getAirCacheKey,
   clearAirCache,
 } from "../src/lib/air-quality/cache";
+import { parseCpcbRecords, calculateHaversineDistanceKm } from "../src/lib/air-quality/cpcb";
 import demoData from "../data/demo-air-quality.json";
 import { EnvironmentalContext } from "../src/lib/schemas/air";
 
@@ -94,5 +95,48 @@ describe("Air Quality LRU Cache", () => {
     expect(getAirCache("key_0")).toBeNull();
     expect(getAirCache("key_4")).toBeNull();
     expect(getAirCache("key_104")).not.toBeNull();
+  });
+});
+
+describe("CPCB Multi-Row Parser & Haversine Matcher", () => {
+  it("calculates accurate Haversine distance between coordinates", () => {
+    const dist = calculateHaversineDistanceKm(28.6315, 77.2167, 28.6469, 77.3160);
+    expect(dist).toBeGreaterThan(9.0);
+    expect(dist).toBeLessThan(10.5);
+  });
+
+  it("groups multi-row pollutant entries by station and selects closest valid station", () => {
+    const rawRecords = [
+      { city: "Delhi", station: "Station A", pollutant_id: "PM2.5", pollutant_avg: "320", latitude: "28.65", longitude: "77.22", last_update: "17-11-2026 18:00:00" },
+      { city: "Delhi", station: "Station A", pollutant_id: "PM10", pollutant_avg: "450", latitude: "28.65", longitude: "77.22", last_update: "17-11-2026 18:00:00" },
+      { city: "Delhi", station: "Station B", pollutant_id: "PM2.5", pollutant_avg: "210", latitude: "28.61", longitude: "77.20", last_update: "17-11-2026 18:00:00" },
+      { city: "Delhi", station: "Station B", pollutant_id: "NO2", pollutant_avg: "45", latitude: "28.61", longitude: "77.20", last_update: "17-11-2026 18:00:00" },
+      { city: "Gurugram", station: "Station C", pollutant_id: "PM2.5", pollutant_avg: "150", latitude: "28.45", longitude: "77.02", last_update: "17-11-2026 18:00:00" },
+    ];
+
+    const result = parseCpcbRecords(rawRecords, 28.6139, 77.2090, "Delhi");
+    expect(result).not.toBeNull();
+    expect(result?.stationName).toBe("Station B");
+    expect(result?.pm25).toBe(210);
+    expect(result?.source).toBe("cpcb");
+  });
+
+  it("prioritizes station matching areaLabel when provided", () => {
+    const rawRecords = [
+      { city: "Delhi", station: "Anand Vihar, Delhi - DPCC", pollutant_id: "PM2.5", pollutant_avg: "380", latitude: "28.64", longitude: "77.31", last_update: "17-11-2026 18:00:00" },
+      { city: "Delhi", station: "Mandir Marg, Delhi - DPCC", pollutant_id: "PM2.5", pollutant_avg: "220", latitude: "28.63", longitude: "77.20", last_update: "17-11-2026 18:00:00" },
+    ];
+
+    const result = parseCpcbRecords(rawRecords, 28.63, 77.20, "Delhi", "Anand Vihar");
+    expect(result?.stationName).toContain("Anand Vihar");
+  });
+
+  it("returns null if no valid PM2.5 readings are found", () => {
+    const rawRecords = [
+      { city: "Delhi", station: "Station X", pollutant_id: "PM2.5", pollutant_avg: "NA", latitude: "28.65", longitude: "77.22" },
+      { city: "Delhi", station: "Station Y", pollutant_id: "PM2.5", pollutant_avg: "-5", latitude: "28.65", longitude: "77.22" },
+    ];
+    const result = parseCpcbRecords(rawRecords, 28.65, 77.22, "Delhi");
+    expect(result).toBeNull();
   });
 });
