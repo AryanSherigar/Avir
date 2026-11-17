@@ -1,5 +1,13 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { validateObservation } from "../src/lib/air-quality/validation";
+import {
+  getAirCache,
+  setAirCache,
+  getAirCacheKey,
+  clearAirCache,
+} from "../src/lib/air-quality/cache";
+import demoData from "../data/demo-air-quality.json";
+import { EnvironmentalContext } from "../src/lib/schemas/air";
 
 describe("Air Quality Observation Validation", () => {
   it("rejects non-positive PM2.5 readings", () => {
@@ -44,5 +52,47 @@ describe("Air Quality Observation Validation", () => {
     expect(res.isValid).toBe(true);
     expect(res.confidence).toBe("low");
     expect(res.warnings).toContain("Station reading is older than 3 hours");
+  });
+});
+
+describe("Air Quality LRU Cache", () => {
+  beforeEach(() => {
+    clearAirCache();
+  });
+
+  it("generates 0.05-degree rounded spatial cache keys", () => {
+    const key1 = getAirCacheKey("Delhi", 28.6139, 77.2090);
+    const key2 = getAirCacheKey("delhi", 28.6200, 77.2140);
+    expect(key1).toBe("delhi_28.6_77.2");
+    expect(key2).toBe("delhi_28.6_77.2");
+  });
+
+  it("stores and retrieves cached environmental context within TTL", () => {
+    const key = getAirCacheKey("Delhi", 28.6139, 77.2090);
+    setAirCache(key, demoData as EnvironmentalContext);
+    const cached = getAirCache(key);
+    expect(cached).not.toBeNull();
+    expect(cached?.currentObservation.stationName).toBe(demoData.currentObservation.stationName);
+  });
+
+  it("evicts entries older than 15-minute TTL", () => {
+    const key = "delhi_test_ttl";
+    setAirCache(key, demoData as EnvironmentalContext);
+    const realNow = Date.now;
+    try {
+      Date.now = () => realNow() + 16 * 60 * 1000;
+      expect(getAirCache(key)).toBeNull();
+    } finally {
+      Date.now = realNow;
+    }
+  });
+
+  it("caps in-memory size to 100 entries evicting oldest", () => {
+    for (let i = 0; i < 105; i++) {
+      setAirCache(`key_${i}`, demoData as EnvironmentalContext);
+    }
+    expect(getAirCache("key_0")).toBeNull();
+    expect(getAirCache("key_4")).toBeNull();
+    expect(getAirCache("key_104")).not.toBeNull();
   });
 });
