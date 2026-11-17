@@ -5,7 +5,13 @@ import {
   isInterventionApplicable,
   getApplicableInterventions,
 } from "../src/lib/interventions/catalogue";
+import {
+  evaluateIntervention,
+  buildMapsDirectionsUrl,
+} from "../src/lib/interventions/evaluate";
 import { HouseholdProfileSchema } from "../src/lib/schemas";
+import demoAir from "../data/demo-air-quality.json";
+
 
 const baseProfile = HouseholdProfileSchema.parse({
   location: { city: "Delhi", areaLabel: "Anand Vihar" },
@@ -129,3 +135,46 @@ describe("Intervention Catalogue & Prerequisite Matcher", () => {
     expect(ids).not.toContain("switch_solid_to_induction");
   });
 });
+
+describe("evaluateIntervention & Maps transit deep links", () => {
+  it("builds correct Google Maps Transit direction URL", () => {
+    const url = buildMapsDirectionsUrl("Anand Vihar", "Connaught Place");
+    expect(url).toBe(
+      "https://www.google.com/maps/dir/?api=1&origin=Anand+Vihar&destination=Connaught+Place&travelmode=transit"
+    );
+  });
+
+  it("returns undefined if origin or destination is missing", () => {
+    expect(buildMapsDirectionsUrl("Anand Vihar", undefined)).toBeUndefined();
+    expect(buildMapsDirectionsUrl(undefined, "Connaught Place")).toBeUndefined();
+  });
+
+  it("evaluates single intervention with evidence and localized strings", () => {
+    const metro = getInterventionById("metro_transit_shift")!;
+    const profileWithTransitLabels = {
+      ...baseProfile,
+      activities: baseProfile.activities.map((a) =>
+        a.id === "a-commute"
+          ? { ...a, originLabel: "Anand Vihar", destinationLabel: "Connaught Place" }
+          : a
+      ),
+    };
+    const evaluatedEn = evaluateIntervention(metro, profileWithTransitLabels, demoAir.hourlyForecast);
+
+    expect(evaluatedEn.interventionId).toBe("metro_transit_shift");
+    expect(evaluatedEn.title).toBe("Switch Daily Commute to Delhi Metro");
+    expect(evaluatedEn.evidence.length).toBeGreaterThan(0);
+    expect(evaluatedEn.evidence[0]?.sourceTitle).toBeDefined();
+    expect(evaluatedEn.environmentalContribution.privateVehicleKmAvoidedPerDay).toBe(15);
+    expect(evaluatedEn.practicality.estimatedCostInr).toBe(60);
+    expect(evaluatedEn.practicality.mapsDirectionsUrl).toBeDefined();
+
+    const hindiProfile = {
+      ...profileWithTransitLabels,
+      constraints: { ...baseProfile.constraints, preferredLanguage: "hi" as const },
+    };
+    const evaluatedHi = evaluateIntervention(metro, hindiProfile, demoAir.hourlyForecast);
+    expect(evaluatedHi.title).toBe("दैनिक आवागमन के लिए दिल्ली मेट्रो का उपयोग करें");
+  });
+});
+
