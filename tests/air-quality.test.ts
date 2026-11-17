@@ -7,6 +7,7 @@ import {
   clearAirCache,
 } from "../src/lib/air-quality/cache";
 import { parseCpcbRecords, calculateHaversineDistanceKm } from "../src/lib/air-quality/cpcb";
+import { parseOpenMeteoPayload } from "../src/lib/air-quality/open-meteo";
 import demoData from "../data/demo-air-quality.json";
 import { EnvironmentalContext } from "../src/lib/schemas/air";
 
@@ -138,5 +139,37 @@ describe("CPCB Multi-Row Parser & Haversine Matcher", () => {
     ];
     const result = parseCpcbRecords(rawRecords, 28.65, 77.22, "Delhi");
     expect(result).toBeNull();
+  });
+});
+
+describe("Open-Meteo Ingestion & 24h Normalization", () => {
+  it("normalizes Open-Meteo hourly arrays into exactly 24 HourlyForecastPoints", () => {
+    const mockAq = {
+      hourly: {
+        time: Array.from({ length: 48 }, (_, i) => `2026-11-17T${String(i % 24).padStart(2, "0")}:00`),
+        pm2_5: Array.from({ length: 48 }, () => 220),
+        pm10: Array.from({ length: 48 }, () => 350),
+      },
+    };
+    const mockWeather = {
+      hourly: {
+        time: Array.from({ length: 48 }, (_, i) => `2026-11-17T${String(i % 24).padStart(2, "0")}:00`),
+        wind_speed_10m: Array.from({ length: 48 }, () => 8.5),
+      },
+    };
+
+    const parsed = parseOpenMeteoPayload(mockAq, mockWeather);
+    expect(parsed).not.toBeNull();
+    expect(parsed?.forecast).toHaveLength(24);
+    expect(parsed?.forecast[0]?.hourIndex).toBe(0);
+    expect(parsed?.forecast[0]?.pm25).toBe(220);
+    expect(parsed?.forecast[0]?.windSpeedKmh).toBe(8.5);
+    expect(parsed?.currentPoint?.source).toBe("open_meteo_current");
+    expect(parsed?.currentPoint?.confidence).toBe("medium");
+  });
+
+  it("handles null/missing payload gracefully", () => {
+    expect(parseOpenMeteoPayload(null)).toBeNull();
+    expect(parseOpenMeteoPayload({})).toBeNull();
   });
 });
