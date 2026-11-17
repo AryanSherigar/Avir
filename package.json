@@ -10,7 +10,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "verify:core": "npx tsx scripts/verify-exposure.ts"
+    "verify:core": "npx tsx scripts/verify-exposure.ts",
+    "verify:simulation": "npx tsx scripts/verify-simulation.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",
